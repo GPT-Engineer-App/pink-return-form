@@ -16,7 +16,7 @@ const Index = () => {
     setIsTermsAccepted(true);
   };
 
-  const handleReturnFormClose = () => {
+  const handleTermsDecline = () => {
     setIsReturnFormOpen(false);
   };
 
@@ -34,12 +34,11 @@ const Index = () => {
         </Button>
       </Box>
 
-      <Modal isOpen={isReturnFormOpen} onClose={handleReturnFormClose}>
+      <Modal isOpen={isReturnFormOpen} onClose={handleTermsDecline}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Return an Item</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{!isTermsAccepted ? <TermsAndConditions onAccept={handleTermsAccept} /> : <ReturnForm />}</ModalBody>
+          <ModalBody>{!isTermsAccepted ? <TermsAndConditions onAccept={handleTermsAccept} onDecline={handleTermsDecline} /> : <ReturnForm />}</ModalBody>
           <ModalFooter>
             <Button colorScheme="pink" mr={3} onClick={handleReturnFormClose}>
               Close
