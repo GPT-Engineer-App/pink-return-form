@@ -1,65 +1,52 @@
 import React, { useState } from "react";
-import { Box, Heading, Text, VStack, FormControl, FormLabel, Input, Textarea, Button, useToast } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
+import TermsAndConditions from "../components/TermsAndConditions";
+import ReturnForm from "../components/ReturnForm";
 
 const Index = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [orderId, setOrderId] = useState("");
-  const [reason, setReason] = useState("");
-  const toast = useToast();
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [isReturnFormOpen, setIsReturnFormOpen] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: Handle form submission logic here
-    toast({
-      title: "Return Submitted",
-      description: "Your return request has been submitted successfully.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-    // Reset form fields
-    setName("");
-    setEmail("");
-    setOrderId("");
-    setReason("");
+  const handleReturnClick = () => {
+    setIsTermsAccepted(false);
+    setIsReturnFormOpen(true);
+  };
+
+  const handleTermsAccept = () => {
+    setIsTermsAccepted(true);
+  };
+
+  const handleReturnFormClose = () => {
+    setIsReturnFormOpen(false);
   };
 
   return (
     <Box bg="pink.50" minH="100vh" py={8}>
-      <VStack spacing={8} align="center">
-        <Heading as="h1" size="2xl" color="pink.600">
-          Report a Return
-        </Heading>
-        <Text fontSize="xl" color="gray.600" textAlign="center" maxW="md">
-          If you need to return an item, please fill out the form below and we will process your return request.
-        </Text>
-        <Box bg="white" p={8} borderRadius="lg" boxShadow="md" maxW="lg" w="100%">
-          <form onSubmit={handleSubmit}>
-            <VStack spacing={6}>
-              <FormControl id="name" isRequired>
-                <FormLabel>Name</FormLabel>
-                <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-              </FormControl>
-              <FormControl id="email" isRequired>
-                <FormLabel>Email</FormLabel>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </FormControl>
-              <FormControl id="orderId" isRequired>
-                <FormLabel>Order ID</FormLabel>
-                <Input type="text" value={orderId} onChange={(e) => setOrderId(e.target.value)} />
-              </FormControl>
-              <FormControl id="reason" isRequired>
-                <FormLabel>Reason for Return</FormLabel>
-                <Textarea value={reason} onChange={(e) => setReason(e.target.value)} />
-              </FormControl>
-              <Button type="submit" colorScheme="pink" size="lg" w="100%">
-                Submit Return
-              </Button>
-            </VStack>
-          </form>
-        </Box>
-      </VStack>
+      <Heading as="h1" size="2xl" color="pink.600" textAlign="center" mb={8}>
+        Products
+      </Heading>
+      <Text fontSize="xl" color="gray.600" textAlign="center" mb={8}>
+        Browse our amazing products!
+      </Text>
+      <Box textAlign="center">
+        <Button colorScheme="pink" size="lg" onClick={handleReturnClick}>
+          Return an Item
+        </Button>
+      </Box>
+
+      <Modal isOpen={isReturnFormOpen} onClose={handleReturnFormClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Return an Item</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>{!isTermsAccepted ? <TermsAndConditions onAccept={handleTermsAccept} /> : <ReturnForm />}</ModalBody>
+          <ModalFooter>
+            <Button colorScheme="pink" mr={3} onClick={handleReturnFormClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
